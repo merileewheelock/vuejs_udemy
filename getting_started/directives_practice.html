@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="vue.js"></script>
+</head>
+<body>
+
+	<div id="app">
+		<h1 v-once>{{ title }}</h1>
+		<!-- v-once will keep the original value after rendered; will not adjust after title value is rewritten in method sayHello -->
+
+		<!-- <p>{{ title }}</p> -->
+		<!-- The {{ }} syntax is interpolation -->
+		<!-- We have access to all properties in the data object (don't need to call "this.title" or "data.title") -->
+		<p>{{ sayHello() }}</p>
+
+		<!-- <a href="{{ link }}">Google</a> -->
+		<!-- This would NOT work because we can't use {{ }} in any html attribute. Only where we would use text, not html -->
+		<p><a v-bind:href="link">Google</a></p>
+		<!-- v-bind says to use Vue for an html attribute; don't need {{ }} because already in Vue -->
+		<!-- A directive is an instruction placed in code; argument is passed after colon -->
+		<hr />
+		<p v-html="finishedLink"></p>
+		<!-- v-html tells VueJS to render html code and not escape it; this exposes you to cross-side scripting attacks; need to check that source is clean or you have sanitized on your own -->
+
+	</div>
+
+	<script type="text/javascript">
+		
+		// The new VueJS instance creates a template based on our VueJS and uses this template to render our real HTML code, which is rendered by the DOM. Does not add runtime.
+		new Vue({
+			el: '#app',
+			data: {
+				title: 'Hello world!',
+				link: 'http://google.com',
+				finishedLink: '<a href="http://google.com">Google</a>'
+			},
+			methods: {
+				sayHello: function(){
+					this.title = 'Hello!'; // this overwrites the title of 'Hello world!' from data
+					// return 'Hello!';
+					// This can be converted to a string and outputted in the DOM
+					return this.title;
+					// Using this anywhere within the Vue instance will give us access to any property
+				}
+			}
+		})
+
+	</script>
+
+</body>
+</html>
